@@ -144,7 +144,7 @@ class GameState():
         next_board = copy.deepcopy(self.board)
         next_board.place_stone(player, move.point)
         new_string = next_board.get_go_string(move.point)
-        return new_string.num+liberties == 0
+        return new_string.num_liberties == 0
 
     @property
     def situation(self):
