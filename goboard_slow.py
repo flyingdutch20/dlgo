@@ -24,8 +24,8 @@ class Move():
 class GoString():
     def __init__(self, color, stones, liberties):
         self.color = color
-        self.stones = stones
-        self.liberties = liberties
+        self.stones = set(stones)
+        self.liberties = set(liberties)
 
     def remove_liberty(self, point):
         self.liberties.remove(point)
@@ -70,7 +70,7 @@ class Board():
             neighbor_string = self._grid.get(neighbor)
             if neighbor_string is None:
                 liberties.append(neighbor)
-            elif neighbor_string.color ==player:
+            elif neighbor_string.color == player:
                 if neighbor_string not in adjacent_same_color:
                     adjacent_same_color.append(neighbor_string)
             else:
@@ -85,7 +85,7 @@ class Board():
             other_color_string.remove_liberty(point)
         for other_color_string in adjacent_opposite_color:
             if other_color_string.num_liberties == 0:
-                self.remove_string(other_color_string)
+                self._remove_string(other_color_string)
 
     def is_on_grid(self, point):
         return 1 <= point.row <= self.num_rows and \
@@ -150,7 +150,7 @@ class GameState():
     def situation(self):
         return (self.next_player, self.board)
 
-    def does_move_violate_ko(self,player, move):
+    def does_move_violate_ko(self, player, move):
         if not move.is_play:
             return False
         next_board = copy.deepcopy(self.board)
